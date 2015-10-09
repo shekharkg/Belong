@@ -35,7 +35,7 @@ public class Products {
   List<String[]> keyFeatures;
   String url;
   @SerializedName("images_o")
-  List<ImagesO> imagesOs;
+  ImagesO imagesOs;
   List<Images> images;
   @SerializedName("biq_score")
   int bigScore;
@@ -162,11 +162,11 @@ public class Products {
     this.url = url;
   }
 
-  public List<ImagesO> getImagesOs() {
+  public ImagesO getImagesOs() {
     return imagesOs;
   }
 
-  public void setImagesOs(List<ImagesO> imagesOs) {
+  public void setImagesOs(ImagesO imagesOs) {
     this.imagesOs = imagesOs;
   }
 
