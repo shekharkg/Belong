@@ -1,5 +1,9 @@
 package com.shekharkg.belong;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -66,7 +70,23 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
 
   @Override
   public void failedOperation(Object object, boolean isCalledFirstTime) {
-//    progressView.setVisibility(View.GONE);
+    progressView.setVisibility(View.GONE);
+    showRetryDialog((String) object, isCalledFirstTime);
+  }
+
+  private void showRetryDialog(String errorMsg, final boolean isCalledFirstTime) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle(errorMsg);
+
+    builder.setPositiveButton("Retry",
+        new DialogInterface.OnClickListener() {
+          public void onClick(DialogInterface dialog, int which) {
+            progressView.setVisibility(View.VISIBLE);
+            new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, isCalledFirstTime);
+          }
+        }
+    );
+    builder.show();
   }
 
   @Override
@@ -78,7 +98,7 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
   public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
     final int lastItem = firstVisibleItem + visibleItemCount;
     if (lastItem == totalItemCount) {
-      if (!isApiCalledOnScrollToEnd) {
+      if (!isApiCalledOnScrollToEnd && data.getProductList().size() < data.getTotalNumberOfProducts()) {
         progressView.setVisibility(View.VISIBLE);
         new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, false);
       }

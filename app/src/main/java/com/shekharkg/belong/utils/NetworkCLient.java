@@ -1,6 +1,8 @@
 package com.shekharkg.belong.utils;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -18,7 +20,18 @@ public class NetworkClient {
 
   public static final String FIRST_API = "http://api.buyingiq.com/v1/search";
 
+  public boolean isNetworkConnected(Context context) {
+    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+    return networkInfo != null && networkInfo.isConnected();
+  }
+
   public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams, int pageNumber, final boolean isCalledFirstTime) {
+
+    if (!isNetworkConnected(context)) {
+      callBack.failedOperation("Please check Network Connection!", isCalledFirstTime);
+      return;
+    }
 
     AsyncHttpClient client = new AsyncHttpClient();
     requestParams.add("tags", "mobiles");
@@ -30,7 +43,7 @@ public class NetworkClient {
       @Override
       public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
                             Throwable throwable) {
-          callBack.failedOperation(null, isCalledFirstTime);
+        callBack.failedOperation("Something went WRONG!!!", isCalledFirstTime);
       }
 
       @Override
