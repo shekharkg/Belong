@@ -18,24 +18,19 @@ public class NetworkClient {
 
   public static final String FIRST_API = "http://api.buyingiq.com/v1/search";
 
-  public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams, final boolean isCalledFirstTime) {
+  public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams, int pageNumber, final boolean isCalledFirstTime) {
 
     AsyncHttpClient client = new AsyncHttpClient();
     requestParams.add("tags", "mobiles");
     requestParams.add("facet", "1");
-    requestParams.add("page", "1");
+    requestParams.add("page", String.valueOf(pageNumber));
 
     client.get(context, FIRST_API, requestParams, new AsyncHttpResponseHandler() {
 
       @Override
       public void onFailure(int statusCode, Header[] headers, byte[] responseBody,
                             Throwable throwable) {
-        try {
-          String responseJson = new String(responseBody);
-          Log.e("Belong -> onFailure", responseJson);
-        } catch (Exception e) {
-          e.printStackTrace();
-        }
+          callBack.failedOperation(null, isCalledFirstTime);
       }
 
       @Override

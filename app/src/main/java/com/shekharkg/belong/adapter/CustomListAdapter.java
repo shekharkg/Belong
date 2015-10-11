@@ -1,6 +1,7 @@
 package com.shekharkg.belong.adapter;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class CustomListAdapter extends BaseAdapter {
 
-  private List<Product> productList;
+  public List<Product> productList;
   private Context context;
 
   public CustomListAdapter(List<Product> productList, Context context) {
@@ -64,7 +65,9 @@ public class CustomListAdapter extends BaseAdapter {
     holder.storeTv.setText(product.getStoreCount() + (product.getStoreCount() > 1 ? " Stores" : " Store"));
     holder.ratingTV.setText(String.valueOf(product.getAvgRating()));
     holder.voteTv.setText(product.getRatingCount() + (product.getRatingCount() > 1 ? " Votes" : " Vote"));
-    Picasso.with(context).load(product.getImagesOs().getL())
+
+    Picasso.with(context)
+        .load(TextUtils.isEmpty(product.getImagesOs().getL()) ? null : product.getImagesOs().getL())
         .placeholder(android.R.drawable.star_big_off)
         .error(android.R.drawable.stat_notify_error)
         .into(holder.imageView);
