@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by ShekharKG on 10/9/2015.
  */
-public class Products {
+public class Product {
 
   int id;
   String name;

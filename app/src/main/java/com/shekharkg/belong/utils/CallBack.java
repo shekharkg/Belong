@@ -5,7 +5,7 @@ package com.shekharkg.belong.utils;
  */
 public interface CallBack {
 
-  public void successOperation(Object object);
-  public void failedOperation(Object object);
+  public void successOperation(Object object, boolean isCalledFirstTime);
+  public void failedOperation(Object object, boolean isCalledFirstTime);
 
 }

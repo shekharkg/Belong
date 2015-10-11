@@ -14,11 +14,11 @@ import org.apache.http.Header;
 /**
  * Created by ShekharKG on 10/9/2015.
  */
-public class NetworkCLient {
+public class NetworkClient {
 
   public static final String FIRST_API = "http://api.buyingiq.com/v1/search";
 
-  public void getRideAvailability(Context context, final CallBack callBack, final RequestParams requestParams) {
+  public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams, final boolean isCalledFirstTime) {
 
     AsyncHttpClient client = new AsyncHttpClient();
     requestParams.add("tags", "mobiles");
@@ -45,7 +45,7 @@ public class NetworkCLient {
             String responseJson = new String(responseBody);
             Log.e("Belong -> onSuccess", responseJson);
             Data data = new Gson().fromJson(responseJson, Data.class);
-            callBack.successOperation(data);
+            callBack.successOperation(data, isCalledFirstTime);
           } catch (Exception e) {
             e.printStackTrace();
             onFailure(statusCode, headers, responseBody, null);

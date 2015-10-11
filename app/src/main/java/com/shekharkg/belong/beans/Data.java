@@ -25,7 +25,7 @@ public class Data {
   List<Folders> foldersList;
 
   @SerializedName("products")
-  List<Products> productsList;
+  List<Product> productList;
 
   String prev;
   String next;
@@ -70,12 +70,12 @@ public class Data {
     this.foldersList = foldersList;
   }
 
-  public List<Products> getProductsList() {
-    return productsList;
+  public List<Product> getProductList() {
+    return productList;
   }
 
-  public void setProductsList(List<Products> productsList) {
-    this.productsList = productsList;
+  public void setProductList(List<Product> productList) {
+    this.productList = productList;
   }
 
   public String getPrev() {
