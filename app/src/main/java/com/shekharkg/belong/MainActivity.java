@@ -2,19 +2,24 @@ package com.shekharkg.belong;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.loopj.android.http.RequestParams;
+import com.michael.easydialog.EasyDialog;
 import com.shekharkg.belong.adapter.CustomListAdapter;
+import com.shekharkg.belong.adapter.FilterAdapter;
 import com.shekharkg.belong.beans.Data;
 import com.shekharkg.belong.beans.Folders;
 import com.shekharkg.belong.beans.Product;
@@ -81,9 +86,36 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
   }
 
   private void showFilterOptions() {
-    for(Folders folders : data.getFoldersList()){
+    for (final Folders folders : data.getFoldersList()) {
       final RadioButton radioButton = (RadioButton) LayoutInflater.from(this).inflate(R.layout.radio_button, null);
       radioButton.setText(folders.getName());
+
+      radioButton.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          View view = MainActivity.this.getLayoutInflater().inflate(R.layout.filter_dialog, null);
+          Button clearAll = (Button) view.findViewById(R.id.clearAll);
+          Button apply = (Button) view.findViewById(R.id.apply);
+          ListView filterListView = (ListView) view.findViewById(R.id.filterListView);
+          filterListView.setAdapter(new FilterAdapter(folders.getFacetses(), MainActivity.this));
+
+          new EasyDialog(MainActivity.this)
+              .setLayout(view)
+              .setLocationByAttachedView(v)
+              .setGravity(EasyDialog.GRAVITY_BOTTOM)
+              .setAnimationTranslationShow(EasyDialog.DIRECTION_X, 1000, -600, 100, -50, 50, 0)
+              .setAnimationAlphaShow(1000, 0.3f, 1.0f)
+              .setAnimationTranslationDismiss(EasyDialog.DIRECTION_X, 500, -50, 800)
+              .setAnimationAlphaDismiss(500, 1.0f, 0.0f)
+              .setTouchOutsideDismiss(true)
+              .setMatchParent(true)
+              .setMarginLeftAndRight(24, 24)
+              .setBackgroundColor(Color.WHITE)
+              .setOutsideColor(Color.TRANSPARENT)
+              .show();
+        }
+      });
+
       filterRadioButtonList.add(radioButton);
       filterRG.addView(radioButton);
     }

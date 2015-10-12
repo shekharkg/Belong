@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+
+  <ListView
+    android:id="@+id/filterListView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/actionLL"/>
+
+
+  <LinearLayout
+    android:layout_marginBottom="@dimen/image_max_size"
+    android:id="@+id/actionLL"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:layout_centerHorizontal="true"
+    android:orientation="horizontal"
+    android:weightSum="2">
+
+    <Button
+      android:id="@+id/clearAll"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:background="@drawable/radio_button_outline"
+      android:text="Clear All"/>
+
+    <Button
+      android:id="@+id/apply"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:background="@drawable/radio_button_outline"
+      android:text="Apply"/>
+  </LinearLayout>
+</RelativeLayout>
