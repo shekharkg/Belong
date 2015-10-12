@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.Button;
@@ -123,9 +125,14 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
           apply.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              for (SelectedFacets facets : folders.getFacetses())
+              for (SelectedFacets facets : folders.getFacetses()) {
                 if (facets.isSelected() && !selectedTagsList.contains(facets.getTag()))
                   selectedTagsList.add(facets.getTag());
+
+                if(selectedTagsList.contains(facets.getTag())  && !facets.isSelected())
+                  selectedTagsList.remove(selectedTagsList.indexOf(facets.getTag()));
+
+              }
 
               pageCount = 1;
               progressView.setVisibility(View.VISIBLE);
@@ -192,5 +199,28 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
       }
       isApiCalledOnScrollToEnd = true;
     }
+  }
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+  }
+
+  @Override
+  public boolean onOptionsItemSelected(MenuItem item) {
+    int id = item.getItemId();
+    if (id == R.id.action_reset) {
+      selectedTagsList.clear();
+      selectedTagsList.add("mobiles");
+      pageCount = 1;
+      progressView.setVisibility(View.VISIBLE);
+      new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(),
+          pageCount++, true, selectedTagsList);
+
+      return true;
+    }
+
+    return super.onOptionsItemSelected(item);
   }
 }

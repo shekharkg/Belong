@@ -1,3 +1,4 @@
 <resources>
   <string name="app_name">Belong</string>
+  <string name="action_reset_filters">Reset all filters</string>
 </resources>
