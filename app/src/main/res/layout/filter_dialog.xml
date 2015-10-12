@@ -8,16 +8,14 @@
   <ListView
     android:id="@+id/filterListView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_above="@+id/actionLL"/>
+    android:layout_height="300dp"/>
 
 
   <LinearLayout
-    android:layout_marginBottom="@dimen/image_max_size"
+    android:layout_below="@+id/filterListView"
     android:id="@+id/actionLL"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
     android:layout_centerHorizontal="true"
     android:orientation="horizontal"
     android:weightSum="2">
