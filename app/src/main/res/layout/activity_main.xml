@@ -5,10 +5,26 @@
   android:layout_width="match_parent"
   android:layout_height="match_parent">
 
+  <HorizontalScrollView
+    android:id="@+id/filterScrollView"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/filter_bar_height"
+    android:scrollbars="none"
+    android:visibility="gone">
+
+    <RadioGroup
+      android:id="@+id/filterRG"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:orientation="horizontal"/>
+  </HorizontalScrollView>
+
+
   <ListView
     android:id="@+id/listView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_below="@+id/filterScrollView"
     android:divider="@android:color/transparent"
     android:dividerHeight="@dimen/view_margin"
     android:padding="@dimen/view_margin"

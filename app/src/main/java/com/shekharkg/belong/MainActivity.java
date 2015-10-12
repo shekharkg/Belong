@@ -2,18 +2,21 @@ package com.shekharkg.belong;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 import com.loopj.android.http.RequestParams;
 import com.shekharkg.belong.adapter.CustomListAdapter;
 import com.shekharkg.belong.beans.Data;
+import com.shekharkg.belong.beans.Folders;
 import com.shekharkg.belong.beans.Product;
 import com.shekharkg.belong.utils.CallBack;
 import com.shekharkg.belong.utils.NetworkClient;
@@ -24,11 +27,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements CallBack, AbsListView.OnScrollListener {
 
   private ListView listView;
+  private HorizontalScrollView filterScrollView;
+  private RadioGroup filterRG;
   private CustomListAdapter customListAdapter;
   private android.support.v7.widget.CardView progressView;
+
   private Data data;
   private int pageCount;
   private boolean isApiCalledOnScrollToEnd;
+  private List<RadioButton> filterRadioButtonList;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,9 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
     pageCount = 1;
     listView = (ListView) findViewById(R.id.listView);
     progressView = (CardView) findViewById(R.id.progressView);
+    filterScrollView = (HorizontalScrollView) findViewById(R.id.filterScrollView);
+    filterRG = (RadioGroup) findViewById(R.id.filterRG);
+    filterRadioButtonList = new ArrayList<>();
 
     new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, true);
   }
@@ -59,13 +69,24 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
       customListAdapter = new CustomListAdapter(data.getProductList(), this);
       listView.setAdapter(customListAdapter);
       listView.setVisibility(View.VISIBLE);
+      filterScrollView.setVisibility(View.VISIBLE);
       listView.setOnScrollListener(this);
+      showFilterOptions();
     } else {
       customListAdapter.productList = data.getProductList();
       customListAdapter.notifyDataSetChanged();
     }
     isApiCalledOnScrollToEnd = false;
     progressView.setVisibility(View.GONE);
+  }
+
+  private void showFilterOptions() {
+    for(Folders folders : data.getFoldersList()){
+      final RadioButton radioButton = (RadioButton) LayoutInflater.from(this).inflate(R.layout.radio_button, null);
+      radioButton.setText(folders.getName());
+      filterRadioButtonList.add(radioButton);
+      filterRG.addView(radioButton);
+    }
   }
 
   @Override
