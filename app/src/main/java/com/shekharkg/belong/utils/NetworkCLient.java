@@ -10,8 +10,11 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.shekharkg.belong.beans.Data;
+import com.shekharkg.belong.beans.Tag;
 
 import org.apache.http.Header;
+
+import java.util.List;
 
 /**
  * Created by ShekharKG on 10/9/2015.
@@ -26,7 +29,7 @@ public class NetworkClient {
     return networkInfo != null && networkInfo.isConnected();
   }
 
-  public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams, int pageNumber, final boolean isCalledFirstTime) {
+  public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams, int pageNumber, final boolean isCalledFirstTime, List<String> selectedTagsList) {
 
     if (!isNetworkConnected(context)) {
       callBack.failedOperation("Please check Network Connection!", isCalledFirstTime);
@@ -34,9 +37,12 @@ public class NetworkClient {
     }
 
     AsyncHttpClient client = new AsyncHttpClient();
-    requestParams.add("tags", "mobiles");
+    for (String tag : selectedTagsList)
+      requestParams.add("tags", tag);
     requestParams.add("facet", "1");
     requestParams.add("page", String.valueOf(pageNumber));
+
+    Log.i("NetworkClient", requestParams.toString());
 
     client.get(context, FIRST_API, requestParams, new AsyncHttpResponseHandler() {
 

@@ -23,6 +23,7 @@ import com.shekharkg.belong.adapter.FilterAdapter;
 import com.shekharkg.belong.beans.Data;
 import com.shekharkg.belong.beans.Folders;
 import com.shekharkg.belong.beans.Product;
+import com.shekharkg.belong.beans.SelectedFacets;
 import com.shekharkg.belong.utils.CallBack;
 import com.shekharkg.belong.utils.NetworkClient;
 
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
   private int pageCount;
   private boolean isApiCalledOnScrollToEnd;
   private List<RadioButton> filterRadioButtonList;
+  private List<String> selectedTagsList;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,10 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
     filterScrollView = (HorizontalScrollView) findViewById(R.id.filterScrollView);
     filterRG = (RadioGroup) findViewById(R.id.filterRG);
     filterRadioButtonList = new ArrayList<>();
+    selectedTagsList = new ArrayList<>();
+    selectedTagsList.add("mobiles");
 
-    new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, true);
+    new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, true, selectedTagsList);
   }
 
   @Override
@@ -97,9 +101,10 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
           Button clearAll = (Button) view.findViewById(R.id.clearAll);
           Button apply = (Button) view.findViewById(R.id.apply);
           ListView filterListView = (ListView) view.findViewById(R.id.filterListView);
-          filterListView.setAdapter(new FilterAdapter(folders.getFacetses(), MainActivity.this));
+          final FilterAdapter adapter = new FilterAdapter(folders.getFacetses(), MainActivity.this);
+          filterListView.setAdapter(adapter);
 
-          new EasyDialog(MainActivity.this)
+          final EasyDialog easyDialog = new EasyDialog(MainActivity.this)
               .setLayout(view)
               .setLocationByAttachedView(v)
               .setGravity(EasyDialog.GRAVITY_BOTTOM)
@@ -113,6 +118,32 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
               .setBackgroundColor(Color.WHITE)
               .setOutsideColor(Color.TRANSPARENT)
               .show();
+
+          apply.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              for (SelectedFacets facets : folders.getFacetses())
+                if (facets.isSelected() && !selectedTagsList.contains(facets.getTag()))
+                  selectedTagsList.add(facets.getTag());
+
+              pageCount = 1;
+              progressView.setVisibility(View.VISIBLE);
+              new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, true, selectedTagsList);
+              easyDialog.dismiss();
+            }
+          });
+
+          clearAll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              for (SelectedFacets facets : folders.getFacetses()) {
+                if (selectedTagsList.contains(facets.getTag()))
+                  selectedTagsList.remove(selectedTagsList.indexOf(facets.getTag()));
+                facets.setIsSelected(false);
+              }
+              adapter.notifyDataSetChanged();
+            }
+          });
         }
       });
 
@@ -135,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
         new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             progressView.setVisibility(View.VISIBLE);
-            new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, isCalledFirstTime);
+            new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, isCalledFirstTime, selectedTagsList);
           }
         }
     );
@@ -153,7 +184,7 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
     if (lastItem == totalItemCount) {
       if (!isApiCalledOnScrollToEnd && data.getProductList().size() < data.getTotalNumberOfProducts()) {
         progressView.setVisibility(View.VISIBLE);
-        new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, false);
+        new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, false, selectedTagsList);
       }
       isApiCalledOnScrollToEnd = true;
     }

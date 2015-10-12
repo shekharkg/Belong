@@ -66,10 +66,10 @@ public class FilterAdapter extends BaseAdapter {
     convertView.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        if(holder.checkBox.isChecked()){
+        if (holder.checkBox.isChecked()) {
           holder.checkBox.setChecked(false);
           facets.setIsSelected(false);
-        }else{
+        } else {
           holder.checkBox.setChecked(true);
           facets.setIsSelected(true);
         }
