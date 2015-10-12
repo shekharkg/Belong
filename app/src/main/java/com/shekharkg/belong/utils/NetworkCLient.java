@@ -24,12 +24,14 @@ public class NetworkClient {
   public static final String FIRST_API = "http://api.buyingiq.com/v1/search";
 
   public boolean isNetworkConnected(Context context) {
-    ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    ConnectivityManager connectivityManager = (ConnectivityManager) context
+        .getSystemService(Context.CONNECTIVITY_SERVICE);
     NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
     return networkInfo != null && networkInfo.isConnected();
   }
 
-  public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams, int pageNumber, final boolean isCalledFirstTime, List<String> selectedTagsList) {
+  public void getDevices(Context context, final CallBack callBack, final RequestParams requestParams,
+                         int pageNumber, final boolean isCalledFirstTime, List<String> selectedTagsList) {
 
     if (!isNetworkConnected(context)) {
       callBack.failedOperation("Please check Network Connection!", isCalledFirstTime);
@@ -57,7 +59,7 @@ public class NetworkClient {
         if (statusCode == 200) {
           try {
             String responseJson = new String(responseBody);
-            Log.e("Belong -> onSuccess", responseJson);
+//            Log.i("Belong -> onSuccess", responseJson);
             Data data = new Gson().fromJson(responseJson, Data.class);
             callBack.successOperation(data, isCalledFirstTime);
           } catch (Exception e) {

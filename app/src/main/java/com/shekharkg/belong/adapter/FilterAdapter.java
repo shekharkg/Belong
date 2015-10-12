@@ -57,7 +57,7 @@ public class FilterAdapter extends BaseAdapter {
 
     final SelectedFacets facets = selectedFacetses.get(position);
     final ViewHolder holder = (ViewHolder) convertView.getTag();
-    holder.textView.setText(facets.getLabel());
+    holder.textView.setText(facets.getLabel() + " (" + facets.getCount() + ")");
     if (facets.isSelected())
       holder.checkBox.setChecked(true);
     else

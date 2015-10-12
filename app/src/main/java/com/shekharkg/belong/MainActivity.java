@@ -9,7 +9,6 @@ import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
@@ -58,7 +57,8 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
     selectedTagsList = new ArrayList<>();
     selectedTagsList.add("mobiles");
 
-    new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, true, selectedTagsList);
+    new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(),
+        pageCount++, true, selectedTagsList);
   }
 
   @Override
@@ -91,7 +91,8 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
 
   private void showFilterOptions() {
     for (final Folders folders : data.getFoldersList()) {
-      final RadioButton radioButton = (RadioButton) LayoutInflater.from(this).inflate(R.layout.radio_button, null);
+      final RadioButton radioButton = (RadioButton) LayoutInflater.from(this)
+          .inflate(R.layout.radio_button, null);
       radioButton.setText(folders.getName());
 
       radioButton.setOnClickListener(new View.OnClickListener() {
@@ -128,7 +129,8 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
 
               pageCount = 1;
               progressView.setVisibility(View.VISIBLE);
-              new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, true, selectedTagsList);
+              new NetworkClient().getDevices(MainActivity.this, MainActivity.this,
+                  new RequestParams(), pageCount++, true, selectedTagsList);
               easyDialog.dismiss();
             }
           });
@@ -166,7 +168,8 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
         new DialogInterface.OnClickListener() {
           public void onClick(DialogInterface dialog, int which) {
             progressView.setVisibility(View.VISIBLE);
-            new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, isCalledFirstTime, selectedTagsList);
+            new NetworkClient().getDevices(MainActivity.this, MainActivity.this,
+                new RequestParams(), pageCount++, isCalledFirstTime, selectedTagsList);
           }
         }
     );
@@ -184,7 +187,8 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
     if (lastItem == totalItemCount) {
       if (!isApiCalledOnScrollToEnd && data.getProductList().size() < data.getTotalNumberOfProducts()) {
         progressView.setVisibility(View.VISIBLE);
-        new NetworkClient().getDevices(MainActivity.this, MainActivity.this, new RequestParams(), pageCount++, false, selectedTagsList);
+        new NetworkClient().getDevices(MainActivity.this, MainActivity.this,
+            new RequestParams(), pageCount++, false, selectedTagsList);
       }
       isApiCalledOnScrollToEnd = true;
     }
