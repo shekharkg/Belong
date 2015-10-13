@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
   private Data data;
   private int pageCount;
   private boolean isApiCalledOnScrollToEnd;
-  private List<RadioButton> filterRadioButtonList;
   private List<String> selectedTagsList;
 
   @Override
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
     progressView = (CardView) findViewById(R.id.progressView);
     filterScrollView = (HorizontalScrollView) findViewById(R.id.filterScrollView);
     filterRG = (RadioGroup) findViewById(R.id.filterRG);
-    filterRadioButtonList = new ArrayList<>();
     selectedTagsList = new ArrayList<>();
     selectedTagsList.add("mobiles");
 
@@ -82,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
       listView.setVisibility(View.VISIBLE);
       filterScrollView.setVisibility(View.VISIBLE);
       listView.setOnScrollListener(this);
+      filterRG.removeAllViews();
       showFilterOptions();
     } else {
       customListAdapter.productList = data.getProductList();
@@ -156,7 +155,6 @@ public class MainActivity extends AppCompatActivity implements CallBack, AbsList
         }
       });
 
-      filterRadioButtonList.add(radioButton);
       filterRG.addView(radioButton);
     }
   }
